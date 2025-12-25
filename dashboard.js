@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-=======
 // 1. User & Theme Logic (Kept from your original code)
 const email = localStorage.getItem("userEmail");
->>>>>>> b3005820305adf1752f6952010d469f448e18d0f
 
 // 1. CHECK AUTH STATUS (LOGIN HAI YA NAHI)
 onAuthStateChanged(auth, (user) => {
@@ -38,7 +35,6 @@ window.toggleTheme = function(){
 // Apply theme on load
 applyTheme();
 
-<<<<<<< HEAD
 // --- LOGOUT FUNCTION (FIXED) ---
 window.logout = function(){
   signOut(auth).then(() => {
@@ -53,7 +49,6 @@ window.logout = function(){
 
 // --- NAVIGATION FUNCTIONS ---
 window.startInterview = function() {
-=======
 function logout(){
   localStorage.removeItem("userEmail");
   localStorage.removeItem("currentInterview");
@@ -67,7 +62,6 @@ function goHistory() {
 // 2. NEW AI Interview Logic (Replaces your old startInterview)
 async function startInterview() {
   // Get values from your HTML dropdowns
->>>>>>> b3005820305adf1752f6952010d469f448e18d0f
   const role = document.getElementById("role").value;
   const job = document.getElementById("job").value;
   const difficulty = document.getElementById("difficulty").value;
@@ -99,10 +93,8 @@ async function startInterview() {
         })
     });
 
-<<<<<<< HEAD
 window.goHistory = function() {
   window.location.href = "history.html";
-=======
     const data = await response.json();
     console.log("AI Data Received:", data);
 
@@ -141,5 +133,4 @@ window.goHistory = function() {
     btn.innerText = originalText;
     btn.disabled = false;
   }
->>>>>>> b3005820305adf1752f6952010d469f448e18d0f
 }
