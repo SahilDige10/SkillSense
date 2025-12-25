@@ -58,7 +58,7 @@ function loadHistory() {
 
       <strong>${h.role}</strong> (${h.job})<br>
       Difficulty: ${h.difficulty}<br>
-      Score: ${h.totalScore}/100<br>
+      Score: ${h.totalScore}/10<br>
       Date: ${h.date}
     </div>
   `).join("");

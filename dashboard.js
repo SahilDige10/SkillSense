@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+=======
+// 1. User & Theme Logic (Kept from your original code)
+const email = localStorage.getItem("userEmail");
+>>>>>>> b3005820305adf1752f6952010d469f448e18d0f
 
 // 1. CHECK AUTH STATUS (LOGIN HAI YA NAHI)
 onAuthStateChanged(auth, (user) => {
@@ -30,8 +35,10 @@ window.toggleTheme = function(){
   );
 }
 
+// Apply theme on load
 applyTheme();
 
+<<<<<<< HEAD
 // --- LOGOUT FUNCTION (FIXED) ---
 window.logout = function(){
   signOut(auth).then(() => {
@@ -46,27 +53,93 @@ window.logout = function(){
 
 // --- NAVIGATION FUNCTIONS ---
 window.startInterview = function() {
+=======
+function logout(){
+  localStorage.removeItem("userEmail");
+  localStorage.removeItem("currentInterview");
+  window.location.href = "NewIndex.html";
+}
+
+function goHistory() {
+  window.location.href = "history.html";
+}
+
+// 2. NEW AI Interview Logic (Replaces your old startInterview)
+async function startInterview() {
+  // Get values from your HTML dropdowns
+>>>>>>> b3005820305adf1752f6952010d469f448e18d0f
   const role = document.getElementById("role").value;
   const job = document.getElementById("job").value;
   const difficulty = document.getElementById("difficulty").value;
 
+  // Validation
   if (!role || !job || !difficulty) {
-    alert("Select all fields");
+    alert("Please select Role, Job Level, and Difficulty");
     return;
   }
 
-  const config = {
-    role,
-    job,
-    difficulty,
-    total: 10,
-    startedAt: Date.now()
-  };
+  // Update Button to show loading
+  const btn = document.querySelector(".start"); // Grabs the Start Interview button
+  const originalText = btn.innerText;
+  btn.innerText = "AI is thinking...";
+  btn.disabled = true;
 
-  localStorage.setItem("currentInterview", JSON.stringify(config));
-  window.location.href = "interview.html";
-}
+  try {
+    // --- CONNECT TO N8N ---
+    // Make sure this is your correct TEST URL from n8n
+    const webhookUrl = 'https://sahil10.app.n8n.cloud/webhook/generate-questions';
+    
+    const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            role: role, 
+            difficulty: difficulty,
+            jobLevel: job 
+        })
+    });
 
+<<<<<<< HEAD
 window.goHistory = function() {
   window.location.href = "history.html";
+=======
+    const data = await response.json();
+    console.log("AI Data Received:", data);
+
+    // Get the questions from the response
+    let aiQuestions = data.questions;
+
+    // Safety check: Ensure it's a real list
+    if (typeof aiQuestions === 'string') {
+        try {
+            aiQuestions = JSON.parse(aiQuestions);
+        } catch (e) {
+            aiQuestions = [aiQuestions];
+        }
+    }
+
+    // Save config + Questions to LocalStorage
+    const config = {
+      role,
+      job,
+      difficulty,
+      total: aiQuestions.length,
+      questions: aiQuestions, // <--- SAVING AI QUESTIONS HERE
+      startedAt: Date.now()
+    };
+
+    localStorage.setItem("currentInterview", JSON.stringify(config));
+    
+    // Redirect to Interview Page
+    window.location.href = "interview.html";
+
+  } catch (error) {
+    console.error("Error connecting to AI:", error);
+    alert("Failed to generate questions. Please check the console.");
+    
+    // Reset button if it fails
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
+>>>>>>> b3005820305adf1752f6952010d469f448e18d0f
 }
